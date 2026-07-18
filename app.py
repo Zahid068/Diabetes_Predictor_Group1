@@ -120,6 +120,10 @@ def create_visuals(data, result_data):
         ax.set_ylim(0, 1.2)
         ax.legend()
         st.pyplot(fig)
+def display_dataset_summary(data):
+    # Computes and displays descriptive statistical metrics (mean, std, min, max) for the dataset columns
+    st.markdown('<div class="card-title">📋 Dataset Statistical Summary</div>', unsafe_allow_html=True)
+    st.dataframe(data.describe(), use_container_width=True)
 
 def render_ui():
     st.set_page_config(page_title="Diabetes Risk Analyzer", layout="wide")
@@ -127,6 +131,7 @@ def render_ui():
     st.write("An academic-grade, explainable machine learning dashboard designed to process and analyze clinical patient variables.")
     
     data = load_data()
+    display_dataset_summary(data)
     
     st.sidebar.header("📋 Problem Input Config")
     pregnancies = st.sidebar.slider("Pregnancies", min_value=0, max_value=17, value=1, step=1)
