@@ -125,6 +125,17 @@ def display_dataset_summary(data):
     st.markdown('<div class="card-title">📋 Dataset Statistical Summary</div>', unsafe_allow_html=True)
     st.dataframe(data.describe(), use_container_width=True)
 
+def get_bmi_category(bmi_value):
+    # Classifies raw numeric BMI values into standard clinical weight categories
+    if bmi_value < 18.5:
+        return "Underweight 🔵"
+    elif 18.5 <= bmi_value < 25:
+        return "Normal Weight 🟢"
+    elif 25 <= bmi_value < 30:
+        return "Overweight 🟡"
+    else:
+        return "Obese 🔴"
+
 def render_ui():
     st.set_page_config(page_title="Diabetes Risk Analyzer", layout="wide")
     st.title("🩺 Clinical Diabetes Diagnostic & Analytical Portal")
@@ -138,6 +149,7 @@ def render_ui():
     glucose = st.sidebar.slider("Plasma Glucose (mg/dL)", min_value=40, max_value=200, value=117)
     bp = st.sidebar.slider("Diastolic Blood Pressure (mm Hg)", min_value=30, max_value=130, value=72)
     bmi = st.sidebar.slider("Body Mass Index (BMI)", min_value=15.0, max_value=60.0, value=32.0, step=0.1)
+    st.sidebar.caption(f"Status: {get_bmi_category(bmi)}")
     age = st.sidebar.slider("Age (Years)", min_value=21, max_value=90, value=29)
     
     st.sidebar.markdown("---")
