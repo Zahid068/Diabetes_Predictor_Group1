@@ -138,6 +138,17 @@ def get_bmi_category(bmi_value):
     else:
         return "Obese 🔴"
 
+def generate_health_advice(prediction, glucose):
+    # Generates actionable lifestyle and clinical recommendations based on prediction outcome
+    if prediction == 1:
+        advice = "🔹 Target a 45-minute daily brisk walk.\n\n🔹 Strictly reduce processed carbohydrate and refined sugar intake.\n\n🔹 Monitor fasting blood glucose levels weekly."
+    else:
+        advice = "🔹 Maintain your current balanced nutritional diet.\n\n🔹 Keep physical workout activity consistent.\n\n🔹 Undergo routine clinical screening annually."
+    
+    if glucose > 140:
+        advice += "\n\n⚠️ *Clinical Note: The configured glucose input is high. Early specialist consultation is advised.*"
+    return advice
+
 def render_ui():
     st.set_page_config(page_title="Diabetes Risk Analyzer", layout="wide")
     st.title("🩺 Clinical Diabetes Diagnostic & Analytical Portal")
@@ -182,6 +193,10 @@ def render_ui():
             st.subheader("📝 Decision Logic Interpretation")
             explanation_text = generate_explanation(prediction, params)
             st.info(explanation_text)
+
+            st.subheader("📋 Personalized Health Recommendations")
+            advice_text = generate_health_advice(prediction, params['glucose'])
+            st.markdown(advice_text)
             
             st.markdown("---")
             st.subheader("📊 Visual Analytics & Performance Metrics")
