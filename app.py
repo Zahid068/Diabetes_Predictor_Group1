@@ -38,7 +38,9 @@ def run_model_or_algorithm(data, params):
     lr.fit(X_train, y_train)
     lr_preds = lr.predict(X_test)
     
-    rf = RandomForestClassifier(random_state=42)
+    rf =# Configures the ensemble classifier with user-defined tree estimators from the configuration panel
+    rf = RandomForestClassifier(n_estimators=params.get('rf_trees', 100), random_state=42)
+    
     rf.fit(X_train, y_train)
     rf_preds = rf.predict(X_test)
     
@@ -155,6 +157,7 @@ def render_ui():
     st.sidebar.markdown("---")
     st.sidebar.header("🤖 Model Configuration")
     model_choice = st.sidebar.selectbox("Classifier Core", ["Random Forest", "Logistic Regression"])
+    rf_trees = st.sidebar.slider("Model Estimators (Trees)", min_value=10, max_value=200, value=100, step=10)
     
     params = {
         'pregnancies': pregnancies,
@@ -162,7 +165,8 @@ def render_ui():
         'bp': bp,
         'bmi': bmi,
         'age': age,
-        'model_type': model_choice
+        'model_type': model_choice,
+        'rf_trees': rf_trees
     }
     
     if st.sidebar.button("Run Diagnostics Pipeline", type="primary"):
