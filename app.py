@@ -149,6 +149,23 @@ def generate_health_advice(prediction, glucose):
         advice += "\n\n⚠️ *Clinical Note: The configured glucose input is high. Early specialist consultation is advised.*"
     return advice
 
+def display_premium_kpi_cards(data):
+    # Renders high-end glowing metric cards to enhance the top-level analytical UI layout
+    total_records = len(data)
+    diabetic_count = data['Outcome'].sum()
+    diabetic_ratio = (diabetic_count / total_records) * 100
+    
+    col1, col2, col3 = st.columns(3)
+    
+    card_style = "padding: 1.2rem; border-radius: 12px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);"
+    
+    with col1:
+        st.markdown(f'<div style="{card_style} border: 1px solid #38bdf8;"><span style="color: #94a3b8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Total Cohort Population</span><br><span style="font-size: 1.75rem; font-weight: 700; color: #38bdf8;">{total_records} Patients</span></div>', unsafe_allow_html=True)
+    with col2:
+        st.markdown(f'<div style="{card_style} border: 1px solid #f43f5e;"><span style="color: #94a3b8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Positive Clinical Cases</span><br><span style="font-size: 1.75rem; font-weight: 700; color: #f43f5e;">{diabetic_count} Diagnostics</span></div>', unsafe_allow_html=True)
+    with col3:
+        st.markdown(f'<div style="{card_style} border: 1px solid #10b981;"><span style="color: #94a3b8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Baseline Dataset Risk</span><br><span style="font-size: 1.75rem; font-weight: 700; color: #10b981;">{diabetic_ratio:.1f}% Ratio</span></div>', unsafe_allow_html=True)
+
 def render_ui():
     st.set_page_config(page_title="Diabetes Risk Analyzer", layout="wide")
     st.title("🩺 Clinical Diabetes Diagnostic & Analytical Portal")
@@ -156,7 +173,7 @@ def render_ui():
     
     data = load_data()
     display_dataset_summary(data)
-    
+    display_premium_kpi_cards(data)
     st.sidebar.header("📋 Problem Input Config")
     pregnancies = st.sidebar.slider("Pregnancies", min_value=0, max_value=17, value=1, step=1)
     glucose = st.sidebar.slider("Plasma Glucose (mg/dL)", min_value=40, max_value=200, value=117)
