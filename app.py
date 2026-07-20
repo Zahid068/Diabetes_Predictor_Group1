@@ -38,7 +38,7 @@ def run_model_or_algorithm(data, params):
     lr.fit(X_train, y_train)
     lr_preds = lr.predict(X_test)
     
-    rf =# Configures the ensemble classifier with user-defined tree estimators from the configuration panel
+    # Configures the ensemble classifier with user-defined tree estimators from the configuration panel
     rf = RandomForestClassifier(n_estimators=params.get('rf_trees', 100), random_state=42)
     
     rf.fit(X_train, y_train)
