@@ -166,6 +166,32 @@ def display_premium_kpi_cards(data):
     with col3:
         st.markdown(f'<div style="{card_style} border: 1px solid #10b981;"><span style="color: #94a3b8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Baseline Dataset Risk</span><br><span style="font-size: 1.75rem; font-weight: 700; color: #10b981;">{diabetic_ratio:.1f}% Ratio</span></div>', unsafe_allow_html=True)
 
+def create_report_download_button(prediction, params):
+    # Generates a formatted clinical summary report for patient diagnostic export
+    status = "HIGH RISK (POSITIVE)" if prediction == 1 else "NORMAL / LOW RISK (NEGATIVE)"
+    report_text = f"""==================================================
+CLINICAL DIAGNOSTIC ASSESSMENT REPORT
+==================================================
+Patient Metrics Profile:
+- Age: {params['age']} years
+- Plasma Glucose: {params['glucose']} mg/dL
+- Diastolic Blood Pressure: {params['bp']} mm Hg
+- Body Mass Index (BMI): {params['bmi']}
+- Pregnancies: {params['pregnancies']}
+
+Diagnostic Evaluation Output:
+- Selected Algorithm Core: {params['model_type']}
+- Primary Classification Outcome: {status}
+=================================================="""
+
+    st.markdown('<div class="card-title">📥 Export Diagnostic Report</div>', unsafe_allow_html=True)
+    st.download_button(
+        label="📄 Download Official Diagnostic Summary (.txt)",
+        data=report_text,
+        file_name=f"Patient_Diagnostic_Report_{params['age']}Y.txt",
+        mime="text/plain"
+    )
+
 def render_ui():
     st.set_page_config(page_title="Diabetes Risk Analyzer", layout="wide")
     st.title("🩺 Clinical Diabetes Diagnostic & Analytical Portal")
@@ -224,6 +250,9 @@ def render_ui():
                 'model_choice': model_choice
             }
             create_visuals(data, result_payload)
+            st.markdown("<br>", unsafe_allow_html=True)
+            create_report_download_button(prediction, params)
+    
     else:
         st.warning("👈 Adjust the medical features on the left configuration panel and click 'Run Diagnostics Pipeline'.")
 
